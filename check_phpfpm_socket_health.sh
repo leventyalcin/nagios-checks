@@ -12,7 +12,7 @@ ERR_SOCKET=""
 SOCKETS=0
 
 for i in $(ls -1 ${POOLD}/*.conf 2>/dev/null); do
-    SOCKET_FILE=$(grep -E "^listen.[ \t].=*" "${i}" | awk '{print $NF}')
+    SOCKET_FILE=$(sed -n 's/.*listen *= *\([^ ]*.*\)/\1/p' "${i}")
     if  [ -n "${SOCKET_FILE}" ] && \
         [ $(echo /dev/null | socat UNIX:$SOCKET_FILE - 2>/dev/null) ]
     then
